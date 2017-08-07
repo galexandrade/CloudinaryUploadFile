@@ -8,7 +8,7 @@ import { CloudinaryModule } from '@cloudinary/angular-4.x';
 import cloudinaryConfiguration from './config';
 import { AppComponent } from './app.component';
 import { FileUploadModule } from 'ng2-file-upload';
-import { MidiaService } from "app/media.service";
+import { MediaService } from "app/media.service";
 
 @NgModule({
   declarations: [
@@ -21,7 +21,7 @@ import { MidiaService } from "app/media.service";
     FileUploadModule,
     CloudinaryModule.forRoot(cloudinary, cloudinaryConfiguration),
   ],
-  providers: [MidiaService],
+  providers: [MediaService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

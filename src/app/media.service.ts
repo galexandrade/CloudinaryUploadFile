@@ -5,7 +5,7 @@ import { Cloudinary } from '@cloudinary/angular-4.x';
 import { NgZone, Injectable } from "@angular/core";
 
 @Injectable()
-export class MidiaService {
+export class MediaService {
     responses: Array<any>;
     private hasBaseDropZoneOver: boolean = false;
     private uploader: FileUploader;
@@ -38,18 +38,19 @@ export class MidiaService {
 
     setUpload(): FileUploader{
         this.uploader = new FileUploader(this.uploaderOptions);
-        this.uploader.onBuildItemForm = this.onBuildItemForm;
+        this.uploader.onBuildItemForm = this.onBuildItemForm.bind(this);;
 
         // Update model on completion of uploading a file
-        this.uploader.onCompleteItem = this.onCompleteItem;
+        this.uploader.onCompleteItem = this.onCompleteItem.bind(this);
     
         // Update model on upload progress event
-        this.uploader.onProgressItem = this.onChangeProgress;
+        this.uploader.onProgressItem = this.onChangeProgress.bind(this);;
 
         return this.uploader;
     }
 
     onBuildItemForm(fileItem: any, form: FormData): any{
+        console.log("onBuildItemForm");
         // Add Cloudinary's unsigned upload preset to the upload form
         form.append('upload_preset', this.cloudinary.config().upload_preset);
         // Add built-in and custom tags for displaying the uploaded photo in the list
@@ -67,6 +68,7 @@ export class MidiaService {
     }
 
     onChangeProgress(fileItem: any, progress: any){
+        console.log("onChangeProgress");
         this.updateProgress({
             file: fileItem.file,
             progress,
@@ -75,6 +77,7 @@ export class MidiaService {
     }
 
     onCompleteItem(item: any, response: string, status: number, headers: ParsedResponseHeaders){
+        console.log("onCompleteItem");
         console.log(response);
         this.updateProgress({
             file: item.file,
@@ -84,6 +87,7 @@ export class MidiaService {
     }
 
     updateProgress(fileItem){
+        console.log("updateProgress");
         // Run the update in a custom zone since for some reason change detection isn't performed
         // as part of the XHR request to upload the files.
         // Running in a custom zone forces change detection
@@ -112,6 +116,7 @@ export class MidiaService {
     }
 
     delete (data: any) {
+        console.log("delete");
         const url = `https://api.cloudinary.com/v1_1/${this.cloudinary.config().cloud_name}/delete_by_token`;
         let headers = new Headers({ 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' });
         let options = new RequestOptions({ headers: headers });
